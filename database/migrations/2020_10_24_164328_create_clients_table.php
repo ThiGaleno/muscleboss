@@ -20,13 +20,13 @@ class CreateClientsTable extends Migration
             $table->string('gender', 10);
 
             $table->integer('adress_id')->unsigned();
-            $table->foreign('adress_id')->references('id')->on('adresses');
+            $table->foreign('adress_id')->references('id')->on('adresses')->onDelete('cascade');
 
             $table->integer('phone_id')->unsigned();
-            $table->foreign('phone_id')->references('id')->on('phones');
+            $table->foreign('phone_id')->references('id')->on('phones')->onDelete('cascade');
 
-            $table->integer('salesman_id')->unsigned();
-            $table->foreign('salesman_id')->references('id')->on('salesmen');
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });
