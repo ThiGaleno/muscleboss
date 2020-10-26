@@ -10,5 +10,5 @@ class Adress extends Model
 
     protected $table = 'adresses';
     protected $primaryKey = 'id';
-    protected $fillable = ['country', 'state', 'city', 'street', 'zip_code', 'number'];
+    protected $fillable = ['state', 'city', 'street', 'zip_code', 'number'];
 }

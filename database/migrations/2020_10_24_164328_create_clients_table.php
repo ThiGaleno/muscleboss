@@ -25,8 +25,8 @@ class CreateClientsTable extends Migration
             $table->integer('phone_id')->unsigned();
             $table->foreign('phone_id')->references('id')->on('phones')->onDelete('cascade');
 
-            $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->bigInteger('salesman_id')->unsigned();
+            $table->foreign('salesman_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });

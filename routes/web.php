@@ -24,4 +24,7 @@ Route::post('/admin/edit/{id}', 'AdminController@update')->name('admin-edit');
 Route::get('/admin/delete/{id}', 'AdminController@destroy')->name('admin-delete');
 
 Route::get('/client', 'ClientController@index')->name('client-index');
-Route::get('/client/register', 'ClientController@create')->name('client-register');
+Route::post('/client/register', 'ClientController@store')->name('client-store');
+Route::get('/client/form/{id?}', 'ClientController@create')->name('client-create');
+Route::post('/client/edit/{id}', 'ClientController@update')->name('client-edit');
+Route::get('/client/delete/{id}', 'ClientController@destroy')->name('client-delete');
