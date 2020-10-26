@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Client;
 use App\Adress;
 use App\Phone;
@@ -18,8 +19,26 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
-        $salesmen = User::all();
+        $clients = Client::select(
+            'clients.id',
+            'clients.name as name',
+            'users.name as salesman',
+            'birth_date',
+            'gender',
+            'zip_code',
+            'state',
+            'city',
+            'street',
+            'number',
+            'landline',
+            'mobile'
+        )
+            ->join('adresses', 'clients.adress_id', 'adresses.id')
+            ->join('phones', 'clients.phone_id', 'phones.id')
+            ->join('users', 'clients.salesman_id', 'users.id')
+            ->get();
+
+        $salesmen = User::select()->where('profile', 'salesman');
         // $this->authorize('index', $client);
         return view('auth.client.index', compact('clients', 'salesmen'));
 
@@ -44,7 +63,27 @@ class ClientController extends Controller
      */
     public function create($id = null)
     {
-        $client = Client::find($id);
+        $client = Client::select(
+            'clients.id',
+            'adress_id',
+            'phone_id',
+            'clients.name as name',
+            'birth_date',
+            'gender',
+            'zip_code',
+            'state',
+            'city',
+            'street',
+            'number',
+            'landline',
+            'mobile'
+        )
+            ->join('adresses', 'clients.adress_id', 'adresses.id')
+            ->join('phones', 'clients.phone_id', 'phones.id')
+            ->where('clients.id', $id)
+            ->get();
+        $client = $client[0];
+        // $client = Client::find($id);
         $salesmen = User::all();
         return view('auth.client.form', compact('client', 'salesmen'));
     }
@@ -123,24 +162,25 @@ class ClientController extends Controller
         $dados = $request->all();
         $adress_id = $dados['adress_id'];
         $phone_id = $dados['phone_id'];
-        $user = $dados['user_id'];
 
-        $adresses = $dados['zip_code'];
-        $adresses = $dados['state'];
-        $adresses = $dados['city'];
-        $adresses = $dados['street'];
-        $adresses = $dados['number'];
+        $adresses['zip_code'] = $dados['zip_code'];
+        $adresses['state'] = $dados['state'];
+        $adresses['city'] = $dados['city'];
+        $adresses['street'] = $dados['street'];
+        $adresses['number'] = $dados['number'];
 
-        $phones = $dados['landline'];
-        $phones = $dados['mobile'];
+        $phones['landline'] = $dados['landline'];
+        $phones['mobile'] = $dados['mobile'];
 
-        $clients = $dados['name'];
-        $clients = $dados['birth_date'];
-        $clients = $dados['gender'];
-        $clients = $dados['user_id'];
+        $clients['name'] = $dados['name'];
+        $clients['birth_date'] = $dados['birth_date'];
+        $clients['gender'] = $dados['gender'];
+        $clients['salesman_id'] = $dados['salesman_id'];
 
-        Adress::find($adress_id)->update($adresses);
-        Phone::find($phone_id)->update($phones);
+        $adress_id = Adress::find($adress_id)->update($adresses);
+        $phone_id = Phone::find($phone_id)->update($phones);
+        Client::find($id)->update($clients);
+        return redirect()->route('client-index');
     }
 
     /**
@@ -151,6 +191,7 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Client::destroy($id);
+        return redirect()->route('client-index');
     }
 }

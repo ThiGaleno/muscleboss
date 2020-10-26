@@ -40,21 +40,22 @@ class AdminController extends Controller
      */
     public function create($id = null)
     {
-        if (isset($id)) {
-            //está logado e é admin?
-            if (auth::check() && auth::user()->profile == "admin") {
-                $admin = User::find($id);
+        //está logado e é admin?
+        $isAdmin = auth::check() && auth::user()->profile == "admin";
+        if ($isAdmin) {
+            if (isset($id)) {
+                $user = User::find($id);
                 //esta tentando editar um salesman ou ele mesmo?
-                if ($admin->profile == "salesman" || auth::user()->id == $id) {
-                    return view('auth.admin.form', compact('admin'));
+                if ($user->profile == "salesman" || auth::user()->id == $id) {
+                    return view('auth.admin.form', compact('user'));
                 } else {
                     return redirect()->route('admin-index');
                 }
             } else {
-                return view("auth.login");
+                return view('auth.admin.form');
             }
         } else {
-            return view('auth.admin.form');
+            return redirect()->route('admin-index');
         }
     }
 
@@ -104,6 +105,7 @@ class AdminController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
+        dd($data);
         $data['password'] = Hash::make($data['password']);
         User::find($id)->update($data);
         return redirect()->route('admin-index');

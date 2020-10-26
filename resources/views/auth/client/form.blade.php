@@ -6,10 +6,11 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Cadastro de clientes</div>
-
                 <div class="card-body">
                     @if(isset($client))
-                    <form method="POST" action="{{ route('client-store', $client->id) }}">
+                    <form method="POST" action="{{ route('client-edit', $client->id) }}">
+                        <input type="hidden" name="adress_id" value="{{ $client->adress_id }}">
+                        <input type="hidden" name="phone_id" value="{{ $client->phone_id }}">
                         @else
                         <form method="POST" action="{{ route('client-store') }}">
                             @endif
@@ -26,9 +27,9 @@
                             <div class="form-group row">
                                 <label for="gender" class="col-md-4 col-form-label text-md-right">Vendedor*</label>
                                 <div class="col-md-6">
-                                    <select id="salesman" name="salesman" class="form-control">
+                                    <select id="salesman" name="salesman_id" class="form-control">
                                         @foreach($salesmen as $salesman)
-                                        <option value="{{ $salesman->id }}">{{ $salesman->name }} 1</option>
+                                        <option {{ $salesman->id == $client->salesman_id ? "selected='selected'" : '' }} value="{{ $salesman->id }}">{{ $salesman->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -38,8 +39,8 @@
                                 <label for="gender" class="col-md-4 col-form-label text-md-right">Sexo*</label>
                                 <div class="col-md-6">
                                     <select id="gender" name="gender" class="form-control">
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
+                                        <option {{ $client->gender == 'male' ? "selected='selected'" : '' }} value="male">Male</option>
+                                        <option {{ $client->gender == 'female' ? "selected='selected'" : '' }} value="female">Female</option>
                                     </select>
                                 </div>
                             </div>
@@ -47,7 +48,7 @@
                             <div class="form-group row">
                                 <label for="birth_date" class="col-md-4 col-form-label text-md-right">Data de nascimento*</label>
                                 <div class="col-md-6">
-                                    <input id="birth_date" type="date" class="form-control" value="{{ $client ? $client->birth_day : '' }}" name="birth_date" required autofocus>
+                                    <input id="birth_date" type="date" class="form-control" value="{{ $client ? $client->birth_date : '' }}" name="birth_date" required autofocus>
                                 </div>
                             </div>
 
@@ -103,7 +104,7 @@
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Register') }}
+                                        Salvar
                                     </button>
                                 </div>
                             </div>

@@ -8,9 +8,11 @@
             <thead>
                 <tr>
                     <th scope="col">Ações</th>
-                    <th scope="col">E-mail</th>
-                    <th scope="col">Perfil</th>
-                    <th scope="col">ações</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Vendedor</th>
+                    <th scope="col">Data de Nascimento</th>
+                    <th scope="col">Sexo</th>
+                    <th scope="col">Telefone</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,8 +23,10 @@
                         <a class="btn btn-danger" href="{{ route('client-delete', $client->id) }}">Excluir</a>
                     </td>
                     <td>{{ $client->name }}</td>
-                    <td>{{ $client->email }}</td>
-                    <td>{{ $client->profile }}</td>
+                    <td>{{ $client->salesman }}</td>
+                    <td>{{ $client->birth_date }}</td>
+                    <td>{{ $client->gender }}</td>
+                    <td>{{ $client->mobile }}</td>
                 </tr>
                 @endforeach
             </tbody>

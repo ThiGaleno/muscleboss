@@ -17,8 +17,11 @@
                 @foreach($admins as $admin)
                 <tr>
                     <td>
+                        @if($admin->profile == 'salesman')
                         <a class="btn btn-success" href="{{ route('admin-create', $admin->id) }}">Editar</a>
                         <a class="btn btn-danger" href="{{ route('admin-delete', $admin->id) }}">Excluir</a>
+                        @else
+                        @endif
                     </td>
                     <td>{{ $admin->name }}</td>
                     <td>{{ $admin->email }}</td>

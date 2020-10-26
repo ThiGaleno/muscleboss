@@ -8,8 +8,8 @@
                 <div class="card-header">Cadastro de administrador </div>
 
                 <div class="card-body">
-                    @if(isset($admin))
-                    <form method="POST" action="{{ route('admin-edit', $admin->id) }}">
+                    @if(isset($user))
+                    <form method="POST" action="{{ route('admin-edit', $user->id) }}">
                         @endif
                         <form method="POST" action="{{ route('admin-store') }}">
                             @csrf
@@ -18,8 +18,8 @@
                                 <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                                 <div class="col-md-6">
-                                    @if(isset($admin))
-                                    <input id="name" type="text" class="form-control" name="name" value="{{ $admin->name ? $admin->name : '' }}" required autocomplete="name" autofocus>
+                                    @if(isset($user))
+                                    <input id="name" type="text" class="form-control" name="name" value="{{ $user->name ? $user->name : '' }}" required autocomplete="name" autofocus>
                                     @else
                                     <input id="name" type="text" class="form-control" name="name" value="" required autocomplete="name" autofocus>
                                     @endif
@@ -30,13 +30,14 @@
                                 <label for="profile" class="col-md-4 col-form-label text-md-right">Perfil</label>
                                 <div class="col-md-6">
                                     <select class="form-control" name="profile" id="profile" class="form-control">
-                                        @if(isset($admin))
-                                        <option {{ $admin->profile == 'admin' ? "selected='selected'" : '' }}value="admin">Admin</option>
-                                        <option {{ $admin->profile == 'salesman' ? "selected='selected'" : '' }}value="salesman">Salesman</option>
+                                        @if(isset($user))
+                                        <option {{ $user->profile == 'admin' ? "selected='selected'" : '' }} value="admin">Admin</option>
+                                        <option {{ $user->profile == 'salesman' ? "selected='selected'" : '' }} value="salesman">Salesman</option>
                                         @else
                                         <option value="admin">Admin</option>
                                         <option value="salesman">Salesman</option>
                                         @endif
+
                                     </select>
                                 </div>
                             </div>
@@ -45,8 +46,8 @@
                                 <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                                 <div class="col-md-6">
-                                    @if(isset($admin))
-                                    <input id="email" type="email" class="form-control" name="email" value="{{ $admin->email ? $admin->email : '' }}" required autocomplete="email">
+                                    @if(isset($user))
+                                    <input id="email" type="email" class="form-control" name="email" value="{{ $user->email ? $user->email : '' }}" required autocomplete="email">
                                     @else
                                     <input id="email" type="email" class="form-control" name="email" required autocomplete="email">
                                     @endif
