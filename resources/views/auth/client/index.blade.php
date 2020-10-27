@@ -3,6 +3,7 @@
 @section('content')
 
 <div class="container">
+    <a class="btn" href="{{ route('client-create') }}" style="padding-bottom: 10px;">Cadastrar</a>
     <div class="row justify-content-right">
         <table class="table table-striped">
             <thead>
@@ -20,7 +21,9 @@
                 <tr>
                     <td>
                         <a class="btn btn-success" href="{{ route('client-create', $client->id) }}">Editar</a>
+                        @if(isset(auth::user()->profile) == 'admin')
                         <a class="btn btn-danger" href="{{ route('client-delete', $client->id) }}">Excluir</a>
+                        @endif
                     </td>
                     <td>{{ $client->name }}</td>
                     <td>{{ $client->salesman }}</td>

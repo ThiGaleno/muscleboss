@@ -21,11 +21,12 @@ class AdminController extends Controller
 
         if (auth::check() == true) {
             if (auth::user()->profile == "admin") {
+                $userLogged['id'] = auth::user()->id;
                 //caso usuário seja admin
-                return view('auth.admin.index', compact('admins'));
+                return view('auth.admin.index', compact('admins', 'userLogged'));
             } else {
                 //caso não seja admin
-                return view('home');
+                return redirect()->route('client-index');
             }
         } else {
             //caso não esteja logado

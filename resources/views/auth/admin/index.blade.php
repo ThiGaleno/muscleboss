@@ -3,6 +3,7 @@
 @section('content')
 
 <div class="container">
+    <a class="btn" href="{{ route('admin-create') }}" style="padding-bottom: 10px;">Cadastrar</a>
     <div class="row justify-content-right">
         <table class="table table-striped">
             <thead>
@@ -17,7 +18,7 @@
                 @foreach($admins as $admin)
                 <tr>
                     <td>
-                        @if($admin->profile == 'salesman')
+                        @if($admin->profile == 'salesman' || $userLogged['id'] == $admin->id)
                         <a class="btn btn-success" href="{{ route('admin-create', $admin->id) }}">Editar</a>
                         <a class="btn btn-danger" href="{{ route('admin-delete', $admin->id) }}">Excluir</a>
                         @else

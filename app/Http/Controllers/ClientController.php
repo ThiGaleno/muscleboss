@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Requests\ClientRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Client;
 use App\Adress;
+use App\Http\Requests\ClientRequest as RequestsClientRequest;
 use App\Phone;
 use App\User;
 
@@ -63,29 +65,37 @@ class ClientController extends Controller
      */
     public function create($id = null)
     {
-        $client = Client::select(
-            'clients.id',
-            'adress_id',
-            'phone_id',
-            'clients.name as name',
-            'birth_date',
-            'gender',
-            'zip_code',
-            'state',
-            'city',
-            'street',
-            'number',
-            'landline',
-            'mobile'
-        )
-            ->join('adresses', 'clients.adress_id', 'adresses.id')
-            ->join('phones', 'clients.phone_id', 'phones.id')
-            ->where('clients.id', $id)
-            ->get();
-        $client = $client[0];
-        // $client = Client::find($id);
-        $salesmen = User::all();
-        return view('auth.client.form', compact('client', 'salesmen'));
+        if (auth::check()) {
+            $salesmen = User::all();
+            if ($id) {
+                $client = Client::select(
+                    'clients.id',
+                    'adress_id',
+                    'phone_id',
+                    'clients.name as name',
+                    'birth_date',
+                    'gender',
+                    'zip_code',
+                    'state',
+                    'city',
+                    'street',
+                    'number',
+                    'landline',
+                    'mobile'
+                )
+                    ->join('adresses', 'clients.adress_id', 'adresses.id')
+                    ->join('phones', 'clients.phone_id', 'phones.id')
+                    ->where('clients.id', $id)
+                    ->get();
+                $client = $client[0];
+                // $client = Client::find($id);
+                return view('auth.client.form', compact('client', 'salesmen'));
+            } else {
+                return view('auth.client.form', compact('salesmen'));
+            }
+        } else {
+            return redirect()->route('client-index');
+        }
     }
 
     /**
@@ -94,7 +104,7 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RequestsClientRequest $request)
     {
         $dados = $request->all();
         $clients = [];
@@ -116,7 +126,7 @@ class ClientController extends Controller
         $clients['name'] = $dados['name'];
         $clients['birth_date'] = $dados['birth_date'];
         $clients['gender'] = $dados['gender'];
-        $clients['salesman_id'] = $dados['salesman'];
+        $clients['salesman_id'] = $dados['salesman_id'];
 
         $phone = Phone::create($phones);
         $adress = Adress::create($adresses);
@@ -157,7 +167,7 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(RequestsClientRequest $request, $id)
     {
         $dados = $request->all();
         $adress_id = $dados['adress_id'];
@@ -191,7 +201,9 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        Client::destroy($id);
+        if (Auth::user()->profile == 'admin') {
+            Client::destroy($id);
+        }
         return redirect()->route('client-index');
     }
 }
