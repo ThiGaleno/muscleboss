@@ -22,16 +22,18 @@ class ClientPolicy
 
     public function index(User $user, Client $client)
     {
-        return false;
+        return isset($user);
     }
-    public function store()
+    public function store(User $user, Client $client)
     {
+        return isset($user);
     }
-    public function update(User $user, Client $client)
+    public function create(User $user, Client $client)
     {
-        return false;
+        return isset($user);
     }
-    public function delete()
+    public function delete(User $user, Client $client)
     {
+        return $user->profile == 'admin';
     }
 }

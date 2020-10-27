@@ -19,9 +19,10 @@
             <tbody>
                 @foreach($clients as $client)
                 <tr>
-                    <td>
+                    <td>@if($client->salesman_id == auth::user()->id)
                         <a class="btn btn-success" href="{{ route('client-create', $client->id) }}">Editar</a>
-                        @if(isset(auth::user()->profile) == 'admin')
+                        @endif
+                        @if(auth::user()->profile == 'admin')
                         <a class="btn btn-danger" href="{{ route('client-delete', $client->id) }}">Excluir</a>
                         @endif
                     </td>

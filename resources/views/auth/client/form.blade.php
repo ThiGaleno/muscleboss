@@ -36,7 +36,11 @@
                                 <div class="col-md-6">
                                     <select id="salesman" name="salesman_id" class="form-control">
                                         @foreach($salesmen as $salesman)
-                                        <option @if(isset($client)){ {{ $client->salesman_id == $salesman->id  ? "selected='selected'" : '' }} } @endif value="{{ $salesman->id }}">{{ $salesman->name }}</option>
+                                        <option 
+                                        @if(isset($client))
+                                             {{ $client->salesman_id == $salesman->id  ? "selected='selected'" : '' }} 
+                                        @endif 
+                                            value="{{ $salesman->id }}">{{ $salesman->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>

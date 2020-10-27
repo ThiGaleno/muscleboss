@@ -19,9 +19,11 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Client $client)
     {
-        $clients = Client::select(
+        $this->authorize('index', $client);
+
+        $clients = $client->select(
             'clients.id',
             'clients.name as name',
             'users.name as salesman',
@@ -33,7 +35,8 @@ class ClientController extends Controller
             'street',
             'number',
             'landline',
-            'mobile'
+            'mobile',
+            'salesman_id'
         )
             ->join('adresses', 'clients.adress_id', 'adresses.id')
             ->join('phones', 'clients.phone_id', 'phones.id')
@@ -63,8 +66,9 @@ class ClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id = null)
+    public function create($id = null, Client $client)
     {
+        $this->authorize('create', $client);
         if (auth::check()) {
             $salesmen = User::all();
             if ($id) {
@@ -81,7 +85,8 @@ class ClientController extends Controller
                     'street',
                     'number',
                     'landline',
-                    'mobile'
+                    'mobile',
+                    'salesman_id'
                 )
                     ->join('adresses', 'clients.adress_id', 'adresses.id')
                     ->join('phones', 'clients.phone_id', 'phones.id')
@@ -199,8 +204,9 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Client $client)
     {
+        $this->authorize('delete', $client);
         if (Auth::user()->profile == 'admin') {
             Client::destroy($id);
         }
